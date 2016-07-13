@@ -33,10 +33,10 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-armhf/
 
 
-# Bajar el maximo de la memoria a 192MB
+# Bajar el maximo de la memoria a 256MB
 # De lo contrario no se puede instanciar java. 
 # Pues por defecto Karaf pone el líminte máximo en 512M
-ENV JAVA_MAX_MEM 192M
+ENV JAVA_MAX_MEM 256M
 
 # Puertos OpenDaylight
 # 162 - SNMP4SDN
