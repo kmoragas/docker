@@ -1,19 +1,22 @@
 #
-# OpenDaylight Karaf Helium 0.2.0 Dockerfile
+# OpenDaylight Karaf Beryllium 0.4.2 Dockerfile
 #
 
-# Pull base image
+# Se obtiene la imagen base, para el caso de RPI 
+# es necesario que esta imagen sea para ARM
 FROM resin/rpi-raspbian:jessie
 
-# Original Author
+# Autor original
 #MAINTAINER  Docker INS <docker@ins.hsr.ch>
+
+# Autor
 MAINTAINER  kmoragas 
 
-# Update the apt information
-# Install OpenJDK 7 in headless mode
-# Install wget
-# Download distribution-karaf-0.2.0-Helium.tar.gz
-# Install (unzip) OpenDaylight
+# Actualiza la información de apt
+# Instalar OpenJDK 7 in headless mode
+# Instalar wget
+# Descargar distribution-karaf-0.2.0-Helium.tar.gz
+# Instalar (unzip) OpenDaylight
 RUN apt-get update && \
     apt-get -y install openjdk-7-jre-headless \
     wget && \
@@ -24,10 +27,18 @@ RUN apt-get update && \
     tar -C /opt -xzf /opt/odl.tar.gz && \
     rm /opt/odl.tar.gz
 
-# Set JAVA_HOME
+# Establecer la varaible de ambiente JAVA_HOME
+# Además verificar que sea java para ARM
+
 ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-armhf/
 
-# OpenDaylight Ports
+
+# Bajar el maximo de la memoria a 192MB
+# De lo contrario no se puede instanciar java. 
+# Pues por defecto Karaf pone el líminte máximo en 512M
+ENV JAVA_MAX_MEM 192M
+
+# Puertos OpenDaylight
 # 162 - SNMP4SDN
 # 179 - BGP
 # 1088 - JMX access
@@ -54,10 +65,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-armhf/
 EXPOSE 6633 8080 8101 8181
 
 
-# Define working directory.
+# Definir el Directorio de Trabajo
 WORKDIR /opt/distribution-karaf-0.4.2-Beryllium-SR2/bin
 
 
-# Define default command.
+# Define el comando por defecto
 CMD ["./karaf","server"]
-
